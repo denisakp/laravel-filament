@@ -1,0 +1,17 @@
+### Laravel template
+/vendor/
+node_modules/
+npm-debug.log
+
+public/storage
+public/build
+
+storage/*.key
+.env
+.phpunit.result.cache
+.git/
+.idea/
+.vscode/
+*.sqlite*
+.github/
+tests/
