@@ -23,7 +23,6 @@ jobs:
   deploy:
     name: Deploy to ECR
     runs-on: ubuntu-latest
-    environment: production
 
     steps:
       - name: Checkout
@@ -40,11 +39,16 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
+      - name: Automatic Tagging of releases
+        id: increment-git-tag
+        run: |
+          bash .github/scripts/git-update.sh -v patch
+
       - name: Build, and push image to ECR
         id: build-image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          IMAGE_TAG: ${{ github.sha }}
+          IMAGE_TAG: ${{ steps.increment-git-tag.outputs.git-tag }}
         run: |
           docker build --build-arg="DB_HOST=${{secrets.DB_HOST}}" --build-arg="DB_PASSWORD=${{secrets.DB_PASSWORD}}" --build-arg="DB_USERNAME=${{secrets.DB_USERNAME}}" --build-arg="DB_DATABASE=${{secrets.DB_DATABASE}}" --build-arg="AWS_ACCESS_KEY_ID=${{secrets.AWS_ACCESS_KEY_ID}}" --build-arg="AWS_SECRET_ACCESS_KEY=${{secrets.AWS_SECRET_ACCESS_KEY}}" --build-arg="AWS_BUCKET=${{secrets.AWS_BUCKET}}" -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
