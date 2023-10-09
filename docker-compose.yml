@@ -1,0 +1,54 @@
+version: "3.8"
+networks:
+  filament:
+    driver: bridge
+volumes:
+  filament-pgsql:
+    driver: local
+services:
+  proxy:
+    container_name: nginx-proxy
+    image: nginx:alpine-slim
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/var/www/html
+      - ./docker/nginx/site.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - filament
+  php-fpm:
+    container_name: php-fpm
+    build:
+        context: .
+        dockerfile: Dockerfile.local
+    image: laravel-filament:latest
+    volumes:
+      - ./:/var/www/html
+    networks:
+      - filament
+  pgsql:
+    container_name: postgresql
+    image: "postgres:15-alpine"
+    ports:
+      - "${FORWARD_DB_PORT:-5432}:5432"
+    environment:
+      PGPASSWORD: "${DB_PASSWORD:-secret}"
+      POSTGRES_DB: "${DB_DATABASE}"
+      POSTGRES_USER: "${DB_USERNAME}"
+      POSTGRES_PASSWORD: "${DB_PASSWORD:-secret}"
+    volumes:
+      - "filament-pgsql:/var/lib/postgresql/data"
+      - "./docker/pgsql/init-db.sql:/docker-entrypoint-initdb.d/10-create-testing-database.sql"
+    networks:
+      - filament
+    healthcheck:
+      test:
+        - CMD
+        - pg_isready
+        - "-q"
+        - "-d"
+        - "${DB_DATABASE}"
+        - "-U"
+        - "${DB_USERNAME}"
+      timeout: 30s
+      retries: 3
