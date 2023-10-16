@@ -7,21 +7,24 @@ volumes:
     driver: local
 services:
   proxy:
-    container_name: nginx-proxy
+    container_name: nginx
     image: nginx:alpine-slim
     ports:
-      - "8080:80"
+      - "80:80"
     volumes:
       - ./:/var/www/html
       - ./docker/nginx/site.conf:/etc/nginx/conf.d/default.conf
     networks:
       - filament
+    depends_on:
+        - php-fpm
+        - pgsql
   php-fpm:
-    container_name: php-fpm
+    container_name: filament
     build:
         context: .
-        dockerfile: Dockerfile.local
-    image: laravel-filament:latest
+        dockerfile: Dockerfile
+    image: filament:latest
     volumes:
       - ./:/var/www/html
     networks:

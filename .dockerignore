@@ -8,6 +8,7 @@ public/build
 
 storage/*.key
 .env
+.env.local
 .phpunit.result.cache
 .git/
 .idea/
@@ -15,3 +16,8 @@ storage/*.key
 #*.sqlite*
 .github/
 tests/
+
+Dockerfile.local
+docker-compose.yml
+LICENSE.md
+
