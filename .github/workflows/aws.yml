@@ -14,7 +14,7 @@ env:
   ECS_SERVICE: filamentService
   ECS_CLUSTER: EducationCluster
   ECS_TASK_DEFINITION: .github/aws/task-definition.json
-  CONTAINER_NAME: filament
+  CONTAINER_NAME: laravel-filament
 
 permissions:
   contents: read
@@ -42,7 +42,7 @@ jobs:
       - name: Automatic Tagging of releases
         id: increment-git-tag
         run: |
-          bash .github/scripts/git-update.sh -v patch
+          bash .github/scripts/git-update.sh -v minor
 
       - name: Update the tag in task definition
         run: |
