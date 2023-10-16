@@ -11,7 +11,7 @@ on:
 env:
   AWS_REGION: us-east-1
   ECR_REPOSITORY: laravel-filament
-  ECS_SERVICE: filamentService
+  ECS_SERVICE: filament-service
   ECS_CLUSTER: EducationCluster
   ECS_TASK_DEFINITION: .github/aws/task-definition.json
   CONTAINER_NAME: laravel-filament
