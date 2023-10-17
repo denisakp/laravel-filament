@@ -13,7 +13,7 @@ storage/*.key
 .git/
 .idea/
 .vscode/
-#*.sqlite*
+*.sqlite*
 .github/
 tests/
 
