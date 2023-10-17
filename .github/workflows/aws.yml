@@ -1,12 +1,10 @@
 name: Deploy to Amazon
 
 on:
-  push:
-    branches:
-      - develop
   pull_request:
     branches:
       - main
+      - develop
 
 env:
   AWS_REGION: us-east-1
