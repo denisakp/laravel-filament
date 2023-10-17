@@ -30,7 +30,7 @@ ENV FILAMENT_FILESYSTEM_DISK=s3
 
 # Install dependencies.
 RUN apt-get update \
-    && apt-get install -y unzip curl ca-certificates libcurl4-gnutls-dev gnupg libpq-dev nginx libonig-dev libicu-dev \
+    && apt-get install -y unzip curl ca-certificates libcurl4-gnutls-dev gnupg libpq-dev libonig-dev libicu-dev default-mysql-client nginx \
     && apt-get -y autoremove \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
